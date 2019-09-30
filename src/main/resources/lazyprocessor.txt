@@ -1,0 +1,44 @@
+package {0};
+
+import java.util.Locale;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class LazyInitBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
+
+	private static Logger logger = LoggerFactory.getLogger(LazyInitBeanFactoryPostProcessor.class);
+
+	@Override
+	public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
+		logger.debug("start lazy post processor...");
+		for (String beanName : beanFactory.getBeanDefinitionNames()) {
+			if (filteringWith(beanName)) {
+				logger.debug("skipping bean: {}", beanName);
+				continue;
+			}
+			beanFactory.getBeanDefinition(beanName).setLazyInit(true);
+		}
+		logger.debug("stop lazy post processor...");
+	}
+
+	// ==============================================================
+	//
+	//
+	//
+	// ==============================================================
+
+	//
+	// TODO Change this method, based on your need
+	//      Generally this work fine with spring-fox (swagger2)
+	//
+	protected boolean filteringWith(String beanName) {
+		return beanName.toLowerCase(Locale.ENGLISH).contains("mvc");
+	}
+
+}// END
