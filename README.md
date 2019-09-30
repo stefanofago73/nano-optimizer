@@ -34,7 +34,7 @@ public class MyApplication {
 		  .optimizerFor("sample1", context)
 		  .generateJavaCmdLine(false)
 		  .generateLazyProcessor("it.fago.demo")
-		  .useDefualtForMemory()
+		  .useDefaultForMemory()
 		  .build();
 	}
 
@@ -47,7 +47,7 @@ public class MyApplication {
 		  .optimizerFor("sample1", context)      // id is the identifier of the report while context is the Spring Context
 		  .generateJavaCmdLine(false)            // false imply -XX:+AlwaysPreTouch not added to command-line
 		  .generateLazyProcessor("it.fago.demo") // here with specify the base package for the LazyPostProcessor
-		  .useDefualtForMemory()                 // on the command-line, are used memory parameter following some best-practices
+		  .useDefaultForMemory()                 // on the command-line, are used memory parameter following some best-practices
 		  .build();                              // the report is done on console or actual logger for the package
 ```
 

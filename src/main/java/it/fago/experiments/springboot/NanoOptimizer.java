@@ -94,7 +94,7 @@ public class NanoOptimizer {
 	 * 
 	 * @return
 	 */
-	public NanoOptimizer useDefualtForMemory() {
+	public NanoOptimizer useDefaultForMemory() {
 		this.useDefaultMemory = true;
 		return this;
 	}
