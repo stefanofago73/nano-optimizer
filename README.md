@@ -11,12 +11,12 @@ quality but ... I hope you need it, even as a starting point. </br>
 The idea is to collect the main practices on optimizing Spring Boot 1.5.17 </br>
 and above but not 2.x performance, with Tomcat as an embedded server.</br>
 
-Once reported in the main of the Spring Boot Application, the Utilities class,</br>
+Once put in the main of the Spring Boot Application, the utility class,</br>
 appropriately configured, allows to produce a report indicating the JVM command-line,</br>
 the @Import annotation to be used to accelerate the start-up, as it is produced a</br>
 Lazyness configurator for the startup of the services that you can customize.</br>
-A summary mirror of the properties is provided which could be turned off to</br>
-speed up the start and / or decrease memory consumption.</br>
+A summary of the application properties is provided which could be turned off to speed up</br>
+the start and / or decrease memory consumption.</br>
 
 
 ### Configuration Examples ###
