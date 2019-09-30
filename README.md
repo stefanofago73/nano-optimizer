@@ -13,8 +13,8 @@ and above but not 2.x performance, with Tomcat as an embedded server.</br>
 
 Once put in the main of the Spring Boot Application, the utility class,</br>
 appropriately configured, allows to produce a report indicating the JVM command-line,</br>
-the @Import annotation to be used to accelerate the start-up, as it is produced a</br>
-Lazyness configurator for the startup of the services that you can customize.</br>
+the @Import annotation (on the config-class) to be used to accelerate the start-up,  </br>
+it is produced a Lazyness configurator for the startup of the services( you can customize it).</br>
 A summary of the application properties is provided which could be turned off to speed up</br>
 the start and / or decrease memory consumption.</br>
 
