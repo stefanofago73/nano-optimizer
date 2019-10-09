@@ -1,6 +1,9 @@
 ## Nano Optimizer ##
 
 ***WARNING***</br>
+Work in Progress
+
+***WARNING***</br>
 This is a Sunday project ... you don't expect anything of high </br>
 quality but ... I hope you need it, even as a starting point. </br>
 
@@ -8,15 +11,21 @@ quality but ... I hope you need it, even as a starting point. </br>
 ### The Idea ###
 
 
-The idea is to collect the main practices on optimizing Spring Boot 1.5.17 </br>
+The idea is to collect, as code, the main practices on optimizing Spring Boot, 1.5.17 </br>
 and above but not 2.x performance, with Tomcat as an embedded server.</br>
 
 Once put in the main of the Spring Boot Application, the utility class,</br>
 appropriately configured, allows to produce a report indicating the JVM command-line,</br>
-the @Import annotation (on the config-class) to be used to accelerate the start-up,  </br>
+the @Import annotation to be used to accelerate the start-up(under the @Configuration of the App),  </br>
 it is produced a Lazyness configurator for the startup of the services( you can customize it).</br>
 A summary of the application properties is provided which could be turned off to speed up</br>
 the start and / or decrease memory consumption.</br>
+
+more information can be found at the following links:
+[allocation](https://github.com/dsyer/spring-boot-allocations)</br>
+[memory](https://github.com/dsyer/spring-boot-memory-blog/)</br>
+[autoconfig](https://geowarin.com/understanding-spring-boot/)
+
 
 
 ### Configuration Examples ###
