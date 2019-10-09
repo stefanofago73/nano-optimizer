@@ -14,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -94,7 +95,7 @@ public class NanoOptimizer {
 	 * 
 	 * @return
 	 */
-	public NanoOptimizer useDefaultForMemory() {
+	public NanoOptimizer useDefualtForMemory() {
 		this.useDefaultMemory = true;
 		return this;
 	}
@@ -243,10 +244,10 @@ public class NanoOptimizer {
 
 	private void showHeapUsage() {
 		MemoryUsage heap = getMemoryMXBean().getHeapMemoryUsage();
-		long initial = heap.getInit() >= 0 ? heap.getInit() / FACTOR : 0;
-		long used = heap.getUsed() >= 0 ? heap.getUsed() / FACTOR : 0;
-		long committed = heap.getCommitted() >= 0 ? heap.getCommitted() / FACTOR : 0;
-		long max = heap.getMax() >= 0 ? heap.getMax() / FACTOR : 0;
+		long initial = heap.getInit() > 0 ? heap.getInit() / FACTOR : 0;
+		long used = heap.getUsed() > 0 ? heap.getUsed() / FACTOR : 0;
+		long committed = heap.getCommitted() > 0 ? heap.getCommitted() / FACTOR : 0;
+		long max = heap.getMax() > 0 ? heap.getMax() / FACTOR : 0;
 		innerOutput.accept(String.format("Heap: Init: %sMB, Used: %sMB, Committed: %sMB, Max: %sMB ", initial, used,
 				committed, max));
 	}
@@ -254,8 +255,8 @@ public class NanoOptimizer {
 	
 	private void memoryManagement() {
 		MemoryUsage heap = getMemoryMXBean().getHeapMemoryUsage();
-		long initial = heap.getInit() >= 0 ? heap.getInit() / FACTOR : 0;
-		long innerMax = heap.getMax() >= 0 ? heap.getMax() / FACTOR : 0;
+		long initial = heap.getInit() >0 ? heap.getInit() / FACTOR : 0;
+		long innerMax = heap.getMax() >0 ? heap.getMax() / FACTOR : 0;
 
 		if (initial < 200) {
 			innerOutput.accept("better to set initial memory to at least 200m");
@@ -297,6 +298,7 @@ public class NanoOptimizer {
 	// ===============================================================
 
 	private static final Consumer<String> appendCsv(StringBuilder sb) {
+		Objects.requireNonNull(sb,"Buffer must be supplied");
 		return classsName -> {
 			if (isPublicClass(classsName)) {
 				sb
@@ -309,10 +311,11 @@ public class NanoOptimizer {
 	}
 
 	private static final boolean isPublicClass(String fullQualifiedClassName) {
+		Objects.requireNonNull(fullQualifiedClassName, "Null Class NAme Passed!...");
 		try {
 			return (Class.forName(fullQualifiedClassName).getModifiers() == java.lang.reflect.Modifier.PUBLIC);
 		} catch (ClassNotFoundException e) {
-			logger.warn("Problem finding class: {} --> {} returning false!...", String.valueOf(fullQualifiedClassName),
+			logger.warn("Problem finding class: {} --> {} returning false!...",fullQualifiedClassName,
 					e.toString());
 			return false;
 		}
