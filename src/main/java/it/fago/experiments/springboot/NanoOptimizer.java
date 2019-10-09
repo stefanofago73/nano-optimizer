@@ -5,6 +5,7 @@ import static java.lang.management.ManagementFactory.getOperatingSystemMXBean;
 import static java.util.Locale.ENGLISH;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toSet;
+import static org.springframework.boot.autoconfigure.condition.ConditionEvaluationReport.get;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,7 +21,7 @@ import java.util.function.Predicate;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.condition.ConditionEvaluationReport;
+
 import org.springframework.boot.autoconfigure.condition.ConditionEvaluationReport.ConditionAndOutcomes;
 import org.springframework.context.ConfigurableApplicationContext;
 
@@ -95,7 +96,7 @@ public class NanoOptimizer {
 	 * 
 	 * @return
 	 */
-	public NanoOptimizer useDefualtForMemory() {
+	public NanoOptimizer useDefaultForMemory() {
 		this.useDefaultMemory = true;
 		return this;
 	}
@@ -152,16 +153,16 @@ public class NanoOptimizer {
 		requireNonNull(filePath, "a folder is needed");
 		requireNonNull(fileSuffix, "at least a void suffix is needed");
 
-		File target = null;
 		try {
 			Path parents = Files.createDirectories(Paths.get(filePath));
-			target = new File(parents.toFile(), id + "_REPORT_" + fileSuffix);
+			File target = new File(parents.toFile(), id + "_REPORT_" + fileSuffix);
+			logger.info("The report will be on the file: {} ",target);
 			build(line -> outBuffer.append(line).append(LINE_SEPARTOR));
 			RandomAccessFile raf = new RandomAccessFile(target, "rw");
 			raf.write(outBuffer.toString().getBytes("UTF-8"));
 			raf.close();
 		} catch (IOException e) {
-			logger.error("Problem writing on file: {} ...", String.valueOf(target), e);
+			logger.error("Problem writing on file...",e);
 			return;
 		} finally {
 			outBuffer.setLength(0);
@@ -204,16 +205,19 @@ public class NanoOptimizer {
 
 	
 	private void generateImportAnnotation() {
-		StringBuilder buffer = new StringBuilder(2000);
-		buffer.append(LINE_SEPARTOR).append("@Import({").append(LINE_SEPARTOR);
+		StringBuilder buffer = openBuffer();
 
-		ConditionEvaluationReport.get(context.getBeanFactory()).getConditionAndOutcomesBySource().entrySet().stream()
-				.filter(fullMatchNoInner()).map(Map.Entry::getKey).collect(toSet()).stream().forEach(appendCsv(buffer));
+		      get(context.getBeanFactory())
+		        .getConditionAndOutcomesBySource()
+		        .entrySet()
+		        .stream()
+		             .filter(fullMatchNoInner())
+		             .map(Map.Entry::getKey)
+		             .collect(toSet())
+		        .stream()
+		     .forEach(appendCsv(buffer));
 
-		if (buffer.length() > 1) {
-			buffer.setLength(buffer.length() - (LINE_SEPARTOR.length() + 1));
-		}
-		buffer.append("})");
+		closeBuffer(buffer);
 
 		innerOutput.accept(buffer.toString());
 	}
@@ -291,6 +295,23 @@ public class NanoOptimizer {
 		innerOutput.accept("");
 	}
 
+	
+	private final StringBuilder openBuffer(){
+       return  new StringBuilder(4000)
+		    .append(LINE_SEPARTOR)
+		    .append("@Import({")
+		    .append(LINE_SEPARTOR);
+	}
+	
+	
+	private final void closeBuffer(StringBuilder buffer){
+		if (buffer.length() > 1) {
+			buffer.setLength(buffer.length() - (LINE_SEPARTOR.length() + 1));
+		}
+		buffer.append("})");
+	}
+	
+	
 	// ===============================================================
 	//
 	//
