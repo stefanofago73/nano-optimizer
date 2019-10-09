@@ -21,7 +21,7 @@ it is produced a Lazyness configurator for the startup of the services( you can 
 A summary of the application properties is provided which could be turned off to speed up</br>
 the start and / or decrease memory consumption.</br>
 
-more information can be found at the following links:
+more information can be found at the following links:</br>
 [allocation](https://github.com/dsyer/spring-boot-allocations)</br>
 [memory](https://github.com/dsyer/spring-boot-memory-blog/)</br>
 [autoconfig](https://geowarin.com/understanding-spring-boot/)
